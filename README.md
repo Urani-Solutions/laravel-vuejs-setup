@@ -23,7 +23,7 @@ You can run the script directly from GitHub without downloading it (one-liner), 
 Run the script directly via curl and pipe to bash (includes the project name, optional Laravel port, and optional Vite port):
 
 ```bash
-curl -s https://raw.githubusercontent.com/Urani-Solutions/laravel-vuejs-setup/main/setup-laravel-vue.sh | bash -s my-project
+curl -s https://raw.githubusercontent.com/Urani-Solutions/laravel-vuejs-setup/refs/heads/main/create_laravel_vuejs.sh | bash -s my-project
 ```
 - Arguments: `<project-name> [laravel-port] [vite-port]`
   - Defaults: `my-laravel-vue-app`
@@ -32,7 +32,7 @@ curl -s https://raw.githubusercontent.com/Urani-Solutions/laravel-vuejs-setup/ma
 ### Option 2: Download and Run (Safer for Review)
 1. Download the script:
    ```bash
-   curl -O https://raw.githubusercontent.com/Urani-Solutions/laravel-vuejs-setup/main/setup-laravel-vue.sh
+   curl -O https://raw.githubusercontent.com/Urani-Solutions/laravel-vuejs-setup/refs/heads/main/create_laravel_vuejs.sh
    ```
 
 2. Run the script with arguments:
