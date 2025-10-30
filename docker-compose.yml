@@ -1,0 +1,45 @@
+services:
+  php:
+    build:
+      context: .
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./docker/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - php-socket:/run/php
+      - ./:/var/www:delegated
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+  db:
+    image: mysql:8.3.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - '${DATA_PATH:-app-db}:/var/lib/mysql'
+
+  nginx:
+    build:
+      context: ./docker/nginx/
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    restart: unless-stopped
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    ports:
+      - '${APP_PORT:-9000}:80'
+    volumes:
+      - ./:/var/www:delegated
+      - php-socket:/run/php:delegated
+      - ./docker/nginx/app.conf:/etc/nginx/nginx.conf
+      - ./storage/app/public:/var/www/public/storage
+
+volumes:
+  app-db:
+  php-socket:
