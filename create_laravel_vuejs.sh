@@ -17,12 +17,12 @@ cd "$PROJECT_NAME"
 echo "Laravel project created. Installing Vue.js dependencies..."
 
 # Step 2: Install Vue.js and Vite plugin for Vue
-npm install vue@^3.5.0 @vitejs/plugin-vue --save-dev
+npm install vue@^3.5.0 @vitejs/plugin-vue@^6.0.0 --save-dev
 
 echo "Vue dependencies installed. Installing Tailwind CSS..."
 
 # Step 3: Install Tailwind CSS
-npm install -D tailwindcss postcss autoprefixer
+npm install -D tailwindcss@^3.4.14 postcss autoprefixer
 npx tailwindcss init -p
 
 echo "Tailwind installed. Configuring Tailwind..."

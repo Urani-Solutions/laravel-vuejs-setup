@@ -4,9 +4,9 @@ This script automates the setup of a new Laravel project integrated with pure Vu
 
 ## Features
 - Creates a fresh Laravel project.
-- Installs Vue.js 3 and the Vite Vue plugin.
+- Installs Vue.js 3 and the Vite Vue plugin (compatible with Vite 7).
 - Configures Vite for hot module replacement (HMR).
-- Sets up Tailwind CSS with PostCSS and Autoprefixer.
+- Sets up Tailwind CSS v3 with PostCSS and Autoprefixer (avoids v4 init issues).
 - Includes a root `App.vue` component with a simple interactive counter demo styled with Tailwind.
 - Updates the default welcome page to mount the Vue app.
 
