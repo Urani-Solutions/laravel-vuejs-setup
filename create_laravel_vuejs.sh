@@ -154,4 +154,25 @@ echo "  - In a new terminal, run: npm run dev"
 echo "  - Visit http://127.0.0.1:8000"
 echo "  - For production build: npm run build"
 echo ""
+# Optional Docker setup
+read -p "Do you want to download Docker configuration files (nginx, php, db, supervisord, .env) to run the project with Docker? (y/n): " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  echo "Downloading Docker files..."
+  curl -s -o .env https://raw.githubusercontent.com/Urani-Solutions/laravel-vuejs-setup/main/.env
+  curl -s -o Dockerfile https://raw.githubusercontent.com/Urani-Solutions/laravel-vuejs-setup/main/Dockerfile
+  curl -s -o docker-compose.yml https://raw.githubusercontent.com/Urani-Solutions/laravel-vuejs-setup/main/docker-compose.yml
+  curl -s -o supervisord.conf https://raw.githubusercontent.com/Urani-Solutions/laravel-vuejs-setup/main/supervisord.conf
+  mkdir -p docker/nginx docker/php
+  curl -s -o docker/nginx/app.conf https://raw.githubusercontent.com/Urani-Solutions/laravel-vuejs-setup/main/docker/nginx/app.conf
+  curl -s -o docker/nginx/Dockerfile https://raw.githubusercontent.com/Urani-Solutions/laravel-vuejs-setup/main/docker/nginx/Dockerfile
+  curl -s -o docker/php/local.ini https://raw.githubusercontent.com/Urani-Solutions/laravel-vuejs-setup/main/docker/php/local.ini
+  curl -s -o docker/php/www.conf https://raw.githubusercontent.com/Urani-Solutions/laravel-vuejs-setup/main/docker/php/www.conf
+  echo "Docker configuration downloaded to $(pwd)."
+  echo "To run with Docker:"
+  echo "  - Copy .env.example to .env and configure as needed"
+  echo "  - Run: docker-compose up -d"
+  echo "  - Access at http://localhost:9000"
+fi
+
 echo "Project directory: $(pwd)"

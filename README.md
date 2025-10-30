@@ -9,12 +9,14 @@ This script automates the setup of a new Laravel project integrated with pure Vu
 - Sets up Tailwind CSS v3 with PostCSS and Autoprefixer (avoids v4 init issues).
 - Includes a root `App.vue` component with a simple interactive counter demo styled with Tailwind.
 - Updates the default welcome page to mount the Vue app.
+- Optional: Downloads Docker configs for nginx, PHP, MySQL, and Supervisor for containerized development.
 
 ## Prerequisites
 - PHP 8.2+ with Composer.
 - Node.js 18+ with npm.
 - Git (optional, for repo management).
 - `curl` and `bash` (for direct script execution).
+- For Docker: Docker and Docker Compose installed.
 
 ## Usage
 You can run the script directly from GitHub without downloading it (one-liner), or download it first for more control.
@@ -39,7 +41,7 @@ curl -s https://raw.githubusercontent.com/Urani-Solutions/laravel-vuejs-setup/re
    ```bash
    ./setup-laravel-vue.sh my-project
    ```
-   - Defaults to `my-laravel-vue-app` (project), `8000` (Laravel port), `5173` (Vite port) if not provided.
+   - Defaults to `my-laravel-vue-app` (project) if not provided.
 
 3. Follow the on-screen instructions:
    - The script will create the project and configure everything.
@@ -52,6 +54,21 @@ For production:
 npm run build
 ```
 
+## Docker Setup (Optional)
+During script execution, you'll be prompted: "Do you want to download Docker configuration files (nginx, php, db, supervisord) to run the project with Docker? (y/n)"
+
+If you select `y`:
+- Docker files will be downloaded to the project root.
+- Key files include: `docker-compose.yml`, `Dockerfile`, `.env`, `supervisord.conf`, and configs in `./docker/` (nginx/app.conf, nginx/Dockerfile, php/local.ini, php/www.conf).
+
+To run with Docker:
+1. Run: `docker-compose up -d` (builds and starts services: nginx, PHP-FPM, MySQL, Supervisor).
+2. Run migrations: `docker-compose exec php php artisan migrate`.
+3. For Vite assets: `npm run dev`.
+4. Access at `http://localhost:9000` (or your configured port).
+
+Stop with: `docker-compose down`.
+
 ## Project Structure (After Setup)
 The script generates a standard Laravel structure with the following key additions/modifications for Vue.js, Vite, and Tailwind:
 
@@ -61,6 +78,13 @@ my-laravel-vue-app/
 ├── bootstrap/               # Laravel bootstrap files
 ├── config/                  # Laravel config
 ├── database/                # Migrations, factories, seeders
+├── docker/                  # Docker configs (if selected)
+│   └── nginx/
+│   │   ├── app.conf
+│   │   └── Dockerfile
+│   └── php/
+│       ├── local.ini
+│       └── www.conf
 ├── public/                  # Public assets (index.php, etc.)
 ├── resources/
 │   ├── css/
@@ -77,6 +101,10 @@ my-laravel-vue-app/
 ├── vite.config.js           # Vite config (Laravel + Vue plugins)
 ├── package.json             # Node dependencies (Vue, Tailwind, etc.)
 ├── postcss.config.js        # PostCSS config (for Tailwind)
+├── docker-compose.yml       # Docker Compose (if selected)
+├── Dockerfile               # App Dockerfile (if selected)
+├── .env                     # Env (if selected)
+├── supervisord.conf         # Supervisor config (if selected)
 ├── composer.json            # PHP dependencies
 └── ... (other standard Laravel files)
 ```
@@ -85,11 +113,14 @@ my-laravel-vue-app/
 - **Vue Components**: Add more components in `resources/js/` and import them in `app.js`.
 - **Tailwind**: Extend `tailwind.config.js` for custom themes.
 - **Routes**: Update `routes/web.php` to render other Blade views with Vue mounts.
+- **Docker**: Customize `docker-compose.yml` for additional services or volumes.
 
 ## Troubleshooting
-- **npm errors**: Ensure Node.js is up-to-date; clear cache with `npm cache clean --force`.
-- **Composer issues**: Run `composer install` manually if needed.
-- **Vite HMR not working**: Check `npm run dev` output for errors.
+- **npm ERESOLVE (dependency conflicts)**: Ensure Node.js 22+; the script pins compatible versions (@vitejs/plugin-vue@^6.0.0 for Vite 7).
+- **npx tailwindcss init error**: Script uses Tailwind v3 to avoid v4 CLI changes; if issues, run `npm cache clean --force` before setup.
+- **Other npm errors**: Delete `node_modules` and `package-lock.json`, then rerun `npm install`.
+- **Vite HMR not working**: Check `npm run dev` output for errors. Ensure ports are free.
+- **Docker issues**: Ensure Docker is running; check logs with `docker-compose logs`.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
